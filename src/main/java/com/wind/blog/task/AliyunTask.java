@@ -3,9 +3,8 @@ package com.wind.blog.task;
 import com.wind.blog.common.Constant;
 import com.wind.blog.mapper.BlogMapperEx;
 import com.wind.blog.mapper.LinkMapperEx;
-import com.wind.blog.model.emun.BlogFrom;
+import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.thread.LinkThread;
-import com.wind.blog.utils.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class AliyunTask {
      * @param url 链接
      */
     public void startThreadPool(String url) {
-        Thread t = new Thread(new LinkThread(blogMapperEx, linkMapperEx, url, BlogFrom.ALIYUN));
+        Thread t = new Thread(new LinkThread(blogMapperEx, linkMapperEx, url, BlogSource.ALIYUN));
         pool.execute(t);
         AliyunTask.threadSize += 1;
     }

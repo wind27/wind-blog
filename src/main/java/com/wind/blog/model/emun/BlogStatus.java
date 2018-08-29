@@ -1,17 +1,18 @@
 package com.wind.blog.model.emun;
 
 /**
+ * blog 状态
  * @author qianchun
  */
-public enum BlogFrom {
+public enum BlogStatus {
 
-    ALIYUN("aliyun", 1), CSDN("csdn", 2);
+    EDIT("edit", 1), PUBLISH("publish", 2), DISABLE("disable", 3);
 
     private String type;
 
     private Integer value;
 
-    BlogFrom(String type, Integer value) {
+    BlogStatus(String type, Integer value) {
         this.type = type;
         this.value = value;
     }

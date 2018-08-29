@@ -7,7 +7,7 @@ import com.wind.blog.mapper.BlogMapperEx;
 import com.wind.blog.mapper.LinkMapperEx;
 import com.wind.blog.model.Blog;
 import com.wind.blog.model.Link;
-import com.wind.blog.model.emun.BlogFrom;
+import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.emun.MsgType;
 import com.wind.blog.msg.Msg;
 import com.wind.blog.task.AliyunTask;
@@ -28,13 +28,13 @@ public class LinkThread implements Runnable {
 
     private String url;
 
-    private BlogFrom blogFrom;
+    private BlogSource blogFrom;
 
     private String threadName;
 
     private String aliyunRegx = "https://www.aliyun.com/jiaocheng/[0-9]+.html";
 
-    public LinkThread(BlogMapperEx blogMapperEx, LinkMapperEx linkMapperEx, String url, BlogFrom blogFrom) {
+    public LinkThread(BlogMapperEx blogMapperEx, LinkMapperEx linkMapperEx, String url, BlogSource blogFrom) {
         this.blogMapperEx = blogMapperEx;
         this.linkMapperEx = linkMapperEx;
         this.blogFrom = blogFrom;
@@ -52,7 +52,7 @@ public class LinkThread implements Runnable {
                 return;
             }
             // 处理URL
-            if (BlogFrom.ALIYUN.equals(blogFrom)) {
+            if (BlogSource.ALIYUN.equals(blogFrom)) {
                 url = this.dealUrl(aliyunRegx, url);
             }
 
@@ -67,11 +67,11 @@ public class LinkThread implements Runnable {
             Link link = linkMapperEx.findByUrl(url);
             if (link == null) {
                 link = new Link();
-                link.setSource(BlogFrom.ALIYUN.getValue());
+                link.setSource(BlogSource.ALIYUN.getValue());
                 link.setUrl(url);
                 link.setIsParse(Constant.LINK_IS_PARSE.NO);
                 linkMapperEx.insert(link);
-                Blog blog = AliyunBlogService.parse(url);
+                Blog blog = AliyunBlogService.getBlogFromUrl(url);
                 if (blog == null) {
                     logger.info("[链接解析线程] 解析失败, threadName={}, url={}", threadName, url);
                     this.close();
