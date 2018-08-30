@@ -4,17 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.wind.blog.model.Blog;
 import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.emun.BlogStatus;
-import com.wind.blog.utils.HttpUtil;
 import org.apache.commons.lang.StringUtils;
-//import org.htmlparser.Node;
-//import org.htmlparser.NodeFilter;
-//import org.htmlparser.Parser;
-//import org.htmlparser.Tag;
-//import org.htmlparser.filters.CssSelectorNodeFilter;
-//import org.htmlparser.filters.NotFilter;
-//import org.htmlparser.nodes.TagNode;
-//import org.htmlparser.tags.LinkTag;
-//import org.htmlparser.util.NodeList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -47,6 +37,7 @@ public class AliyunBlogService {
      */
     public static Blog getBlogFromUrl(String url) {
         Blog blog = new Blog();
+        blog.setUid(0L);
         blog.setSource(BlogSource.ALIYUN.getValue());
         blog.setStatus(BlogStatus.PUBLISH.getValue());
         blog.setCreateTime(new Date());

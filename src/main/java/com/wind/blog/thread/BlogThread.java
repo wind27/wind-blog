@@ -74,7 +74,7 @@ public class BlogThread implements Runnable {
                     this.close();
                     return;
                 }
-                blogMapperEx.insert(blog);
+                int id = blogMapperEx.insert(blog);
                 linkMapperEx.insert(link);
             }
             logger.info("[BLOG解析线程] 完成, threadName={}, url={}", threadName, url);

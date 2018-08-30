@@ -1,6 +1,7 @@
 package com.wind.blog.mapper;
 
 import com.wind.blog.model.Blog;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -11,6 +12,7 @@ import org.apache.ibatis.type.JdbcType;
  *
  * @author qianchun 2018/8/28
  **/
+@Mapper
 public interface BlogMapperEx extends BlogMapper {
 
     String COLUMNS = " id, tags, from, title, summary, uid, create_time, update_time, publish_time, content ";

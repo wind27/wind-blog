@@ -30,10 +30,12 @@ public class TaskController {
 
     @ResponseBody
     @RequestMapping(value = "task/blog", method = RequestMethod.GET)
-    public String blogTask(@RequestParam("url") String url) {
+    public String blogTask() {
 
+        String url = "https://www.aliyun.com/jiaocheng/870657.html";
         try {
-            if(StringUtils.isNotEmpty(url)) {
+
+            if(StringUtils.isEmpty(url)) {
                 return JsonResponseUtil.fail(ErrorCode.PARAM_ERROR);
             }
             BlogThread blogT = new BlogThread(blogMapperEx, linkMapperEx, url, BlogSource.ALIYUN);

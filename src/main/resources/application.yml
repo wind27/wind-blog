@@ -7,6 +7,5 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 server:
-  port: 8099
-#  servlet:
-#    context-path: "/blog"
+  port: 8080
+

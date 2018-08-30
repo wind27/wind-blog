@@ -1,8 +1,10 @@
 package com.wind.blog.mapper;
 
-import com.wind.blog.model.Blog;
 import com.wind.blog.model.Link;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.type.JdbcType;
 
 /**
@@ -10,6 +12,7 @@ import org.apache.ibatis.type.JdbcType;
  *
  * @author qianchun 2018/8/28
  **/
+@Mapper
 public interface LinkMapperEx extends LinkMapper {
 
     String COLUMNS = " id, source, url, is_parse, blog_id ";
