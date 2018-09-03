@@ -33,7 +33,7 @@ public class AliyunTask {
 
     ExecutorService pool = Executors.newFixedThreadPool(Constant.LINK_MAX_THREAD);
 
-    public static Integer threadSize = 0;
+//    public static Integer threadSize = 0;
 
     public static Set<String> allUrls = new HashSet<>();
 
@@ -44,10 +44,6 @@ public class AliyunTask {
         int pageNum = 1;
         String url = "https://www.aliyun.com/jiaocheng/java-" + pageNum + ".html";
 
-
-
-
-
     }
 
 
@@ -57,9 +53,9 @@ public class AliyunTask {
      * @param url 链接
      */
     public void startThreadPool(String url) {
-        Thread t = new Thread(new LinkThread(blogMapperEx, linkMapperEx, url, BlogSource.ALIYUN));
-        pool.execute(t);
-        AliyunTask.threadSize += 1;
+//        Thread t = new Thread(new LinkThread(blogMapperEx, linkMapperEx, url, BlogSource.ALIYUN));
+//        pool.execute(t);
+//        AliyunTask.threadSize += 1;
     }
 
     /**

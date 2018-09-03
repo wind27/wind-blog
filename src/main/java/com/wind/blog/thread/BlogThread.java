@@ -1,46 +1,45 @@
 package com.wind.blog.thread;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wind.blog.aliyun.AliyunBlogService;
 import com.wind.blog.common.Constant;
-import com.wind.blog.mapper.BlogMapperEx;
-import com.wind.blog.mapper.LinkMapperEx;
 import com.wind.blog.model.Blog;
 import com.wind.blog.model.Link;
 import com.wind.blog.model.emun.BlogSource;
-import com.wind.blog.model.emun.MsgType;
-import com.wind.blog.msg.Msg;
-import com.wind.blog.task.AliyunTask;
+import com.wind.blog.service.BlogService;
+import com.wind.blog.service.LinkService;
+import com.wind.blog.task.BlogTask;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BlogThread implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(BlogThread.class);
 
-    private BlogMapperEx blogMapperEx;
+    private BlogService blogService;
 
-    private LinkMapperEx linkMapperEx;
+    private LinkService linkService;
 
     private String url;
 
-    private BlogSource blogFrom;
+    private BlogSource blogSource;
 
     private String threadName;
 
-    private String ALIYUN_BLOG_URL_REGX = "https://www.aliyun.com/jiaocheng/[0-9]+.html";
-
-    public BlogThread(BlogMapperEx blogMapperEx, LinkMapperEx linkMapperEx, String url, BlogSource blogFrom) {
-        this.blogMapperEx = blogMapperEx;
-        this.linkMapperEx = linkMapperEx;
-        this.blogFrom = blogFrom;
+    /**
+     * 构造方法
+     * @param blogService blogService
+     * @param linkService linkService
+     * @param url 解析 URL
+     * @param blogSource 来源
+     */
+    public BlogThread(BlogService blogService, LinkService linkService, String url, BlogSource blogSource) {
+        this.blogService = blogService;
+        this.linkService = linkService;
+        this.blogSource = blogSource;
         this.url = url;
         this.threadName = Thread.currentThread().getName();
-        logger.info("[BLOG解析线程] 启动 threadName:{}, threadNum={}, url={}", threadName, AliyunTask.threadSize, url);
+        logger.info("[BLOG解析线程] 启动 threadName:{}, threadNum={}, url={}", threadName, ++BlogTask.threadNum, url);
     }
 
     @Override
@@ -60,22 +59,30 @@ public class BlogThread implements Runnable {
             }
 
             // 如果URL是 csdn blog 的文章地址, 则爬取文章地址, 并将文章信息录入库中
-            Link link = linkMapperEx.findByUrl(url);
+            Link link = linkService.findByUrl(url);
             if (link == null) {
-
                 link = new Link();
-                link.setSource(BlogSource.ALIYUN.getValue());
+                link.setSource(blogSource.getValue());
                 link.setUrl(url);
                 link.setIsParse(Constant.LINK_IS_PARSE.YES);
 
-                Blog blog = AliyunBlogService.getBlogFromUrl(url);
+
+                Blog blog = null;
+                if(blogSource == BlogSource.ALIYUN) {
+                    blog = AliyunBlogService.getBlogFromUrl(url);
+                } else if(blogSource == BlogSource.CSDN) {
+
+                }
+
+
                 if (blog == null) {
                     logger.info("[BLOG解析线程] 解析失败, threadName={}, url={}", threadName, url);
                     this.close();
                     return;
                 }
-                int id = blogMapperEx.insert(blog);
-                linkMapperEx.insert(link);
+                blogService.add(blog);
+                link.setBlogId(blog.getId());
+                linkService.add(link);
             }
             logger.info("[BLOG解析线程] 完成, threadName={}, url={}", threadName, url);
             this.close();
@@ -89,7 +96,6 @@ public class BlogThread implements Runnable {
      * 线程结束
      */
     private void close() {
-        AliyunTask.threadSize -= 1;
-        logger.info("[BLOG解析线程] 结束 threadName={}, threadNum={}, url:{}", threadName, AliyunTask.threadSize, url);
+        logger.info("[BLOG解析线程] 结束 threadName={}, threadNum={}, url:{}", threadName, --BlogTask.threadNum, url);
     }
 }

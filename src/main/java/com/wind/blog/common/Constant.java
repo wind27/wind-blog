@@ -241,4 +241,11 @@ public class Constant {
         public static final String ARTICLE = "article_routing";
         public static final String ARTICLE_LINK = "article_link_routing";
     }
+
+
+    //********************************************** aliyun link regex *************************************************
+
+
+    public static final int THREAD_MAX_SIZE = 10;
+    public static String ALIYUN_REGEX = "https://www.aliyun.com/jiaocheng/java-[0-9]+.html";
 }

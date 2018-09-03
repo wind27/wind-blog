@@ -1,9 +1,14 @@
 package com.wind.blog.aliyun;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wind.blog.common.Constant;
 import com.wind.blog.model.Blog;
 import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.emun.BlogStatus;
+import com.wind.blog.rabbitmq.LinkProvider;
+import com.wind.blog.task.LinkTask;
+import com.wind.blog.thread.LinkThread;
+import com.wind.blog.utils.HttpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,6 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -28,6 +34,13 @@ import java.util.regex.Pattern;
  **/
 public class AliyunBlogService {
     private final static Logger logger = LoggerFactory.getLogger(AliyunBlogService.class);
+
+    public static final List<String> catalogList = new ArrayList<>();
+
+    static {
+        catalogList.add("java");
+        catalogList.add("linux");
+    }
 
     /**
      * url 解析 blog
@@ -112,18 +125,19 @@ public class AliyunBlogService {
         return content.replaceAll(regx, "");
     }
 
-    public static void main(String[] args) {
-        List<String> urls = getBlogURLFromPage("https://www.aliyun.com/jiaocheng/java?spm=5176.100033.1.3.DtWFa4");
-        if (!CollectionUtils.isEmpty(urls)) {
-            for (String url : urls) {
-                if (url != null) {
-                    Blog blog = getBlogFromUrl(url);
-                    if (blog != null) {
-                        System.out.println(JSONObject.toJSON(blog));
-                    }
-                    System.out.println("----------------------------------"+blog.getSummary().length());
-                }
-            }
-        }
-    }
+    // public void main(String[] args) {
+    // List<String> urls = getBlogURLFromPage("https://www.aliyun.com/jiaocheng/java?spm=5176.100033.1.3.DtWFa4");
+    // if (!CollectionUtils.isEmpty(urls)) {
+    // for (String url : urls) {
+    // if (url != null) {
+    // Blog blog = getBlogFromUrl(url);
+    // if (blog != null) {
+    // System.out.println(JSONObject.toJSON(blog));
+    // }
+    // System.out.println("----------------------------------" + blog.getSummary().length());
+    // }
+    // }
+    // }
+    // }
+
 }

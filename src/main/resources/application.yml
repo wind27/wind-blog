@@ -1,11 +1,21 @@
 spring:
   application:
-      name: "wind-blog"
+    name: "wind-blog"
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: admin
+    password: admin
+  # publisher-confirms: true
+    virtual-host: /
+
   datasource:
     url: jdbc:mysql://mysql:3306/wind_blog?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+
 server:
   port: 8080
 

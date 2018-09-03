@@ -19,12 +19,15 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -67,12 +70,14 @@ public class HttpUtil {
 
     /**
      * 获取 header
+     * 
      * @return 返回结果
      */
     public static Map<String, String> getHeader() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36");
+        headers.put("User-Agent",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36");
         headers.put("Accept-Encoding", "gzip, deflate, sdch");
         headers.put("Accept-Language", "zh-CN,zh;q=0.8");
         return headers;
@@ -111,7 +116,7 @@ public class HttpUtil {
                 return null;
             }
             httpStr = EntityUtils.toString(entity, "utf-8");
-//            logger.info("HTTP 请求成功，url={}", apiUrl);
+            // logger.info("HTTP 请求成功，url={}", apiUrl);
         } catch (Exception e) {
             logger.error("HTTP 请求异常，url={}, errorMsg={}", apiUrl, e);
         } finally {
@@ -264,5 +269,29 @@ public class HttpUtil {
             logger.error("HTTP 创建 SSL 安全连接出错errorMsg={}", e);
         }
         return sslsf;
+    }
+
+
+    /**
+     * check url is available
+     * @param linkUrl 链接URL
+     * @return 返回结果
+     */
+    public static boolean checkUrlEnable(String linkUrl) {
+        if (StringUtils.isEmpty(linkUrl)) {
+            return false;
+        }
+
+        URL url = null;
+        try {
+            url = new URL(linkUrl);
+            InputStream in = url.openStream();
+            return true;
+        } catch (Exception e1) {
+            if (url != null) {
+                url = null;
+            }
+            return false;
+        }
     }
 }
