@@ -1,8 +1,5 @@
 package com.wind.blog.rabbitmq;
 
-import com.alibaba.fastjson.JSONObject;
-import com.wind.blog.common.RabbitMqConfig;
-import com.wind.blog.msg.Msg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,13 +15,13 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @Configuration
-public class LinkProvider implements RabbitTemplate.ConfirmCallback {
-    private static Logger logger = LoggerFactory.getLogger(LinkProvider.class);
+public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback {
+    private static Logger logger = LoggerFactory.getLogger(RabbitmqConfig.class);
 
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public LinkProvider(RabbitTemplate rabbitTemplate) {
+    public RabbitmqConfig(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
         rabbitTemplate.setConfirmCallback(this);
 
@@ -44,19 +41,5 @@ public class LinkProvider implements RabbitTemplate.ConfirmCallback {
         } else {
             logger.info("[RABBITMQ] confirm 消息消费失败:" + cause);
         }
-    }
-
-    /**
-     * send msg
-     * 
-     * @param msg 消息
-     */
-    public void send(Msg msg) {
-        if (msg == null) {
-            return;
-        }
-        rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_DIRECT_BLOGLINKPARSE,
-                RabbitMqConfig.ROUTING_BLOGLINKPARSE, JSONObject.toJSON(msg));
-        logger.info("[RABBITMQ] send msg: {}", JSONObject.toJSON(msg));
     }
 }

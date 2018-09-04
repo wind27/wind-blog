@@ -1,20 +1,13 @@
 package com.wind.blog.task;
 
-import com.wind.blog.mapper.BlogMapperEx;
-import com.wind.blog.mapper.LinkMapperEx;
 import com.wind.blog.model.emun.BlogSource;
-import com.wind.blog.rabbitmq.LinkProvider;
 import com.wind.blog.service.BlogService;
 import com.wind.blog.service.LinkService;
 import com.wind.blog.thread.BlogThread;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.cache.decorators.SynchronizedCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * BlogService

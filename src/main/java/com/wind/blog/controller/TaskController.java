@@ -1,21 +1,15 @@
 package com.wind.blog.controller;
 
-import com.wind.blog.aliyun.AliyunBlogService;
-import com.wind.blog.mapper.BlogMapperEx;
-import com.wind.blog.mapper.LinkMapperEx;
 import com.wind.blog.model.emun.BlogSource;
-import com.wind.blog.rabbitmq.LinkProvider;
+import com.wind.blog.rabbitmq.RabbitmqConfig;
 import com.wind.blog.redis.RedisService;
 import com.wind.blog.service.LinkService;
 import com.wind.blog.task.LinkTask;
-import com.wind.blog.thread.BlogThread;
-import com.wind.blog.thread.LinkThread;
-import com.wind.blog.utils.HttpUtil;
 import com.wind.commons.ErrorCode;
 import com.wind.utils.JsonResponseUtil;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +26,10 @@ public class TaskController {
     private RedisService redisService;
 
     @Autowired
-    private LinkProvider linkProvider;
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private RabbitmqConfig linkProvider;
 
     @Autowired
     private LinkService linkService;
@@ -75,7 +72,7 @@ public class TaskController {
             if (!BlogSource.ALIYUN.getValue().equals(blogSource)) {
                 return JsonResponseUtil.fail(ErrorCode.PARAM_ERROR);
             }
-            new LinkTask().parseBlogUrl(redisService, linkProvider, BlogSource.ALIYUN);
+            new LinkTask(rabbitTemplate, redisService).parseBlogUrl(BlogSource.ALIYUN);
             return JsonResponseUtil.ok();
         } catch (Exception e) {
             logger.error("[LINK任务] 录入link异常, 参数: url={");

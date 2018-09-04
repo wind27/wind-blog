@@ -1,26 +1,17 @@
 package com.wind.blog.thread;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.wind.blog.aliyun.AliyunBlogService;
 import com.wind.blog.common.Constant;
-import com.wind.blog.mapper.BlogMapperEx;
-import com.wind.blog.mapper.LinkMapperEx;
-import com.wind.blog.model.Blog;
-import com.wind.blog.model.Link;
 import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.emun.MsgType;
 import com.wind.blog.model.emun.QueueName;
 import com.wind.blog.msg.Msg;
-import com.wind.blog.rabbitmq.LinkProvider;
+import com.wind.blog.rabbitmq.RabbitmqConfig;
 import com.wind.blog.redis.RedisService;
-import com.wind.blog.service.BlogService;
-import com.wind.blog.service.LinkService;
-import com.wind.blog.task.AliyunTask;
+import com.wind.blog.task.LinkTask;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -31,9 +22,10 @@ public class LinkThread implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(LinkThread.class);
 
-    private RedisService redisService;
+    // private RedisService redisService;
 
-    private LinkProvider linkProvider;
+    // private RabbitmqConfig linkProvider;
+    private LinkTask linkTask;
 
     private int blogSource;
 
@@ -45,10 +37,9 @@ public class LinkThread implements Runnable {
 
     public static final int THREAD_MAX_SIZE = 10;
 
-    public LinkThread(RedisService redisService, LinkProvider linkProvider, String url, int blogSource) {
-        this.redisService = redisService;
+    public LinkThread(LinkTask linkTask, String url, int blogSource) {
+        this.linkTask = linkTask;
         this.blogSource = blogSource;
-        this.linkProvider = linkProvider;
         this.url = url;
         this.threadName = Thread.currentThread().getName();
         logger.info("[LINK解析线程] 启动 threadName:{}, threadNum={}, url={}", threadName, ++threadNum, url);
@@ -66,25 +57,14 @@ public class LinkThread implements Runnable {
             // 处理URL
             if (BlogSource.ALIYUN.getValue() == blogSource) {
                 url = this.dealUrl(Constant.ALIYUN_REGEX, url);
-            } else if(BlogSource.CSDN.getValue() == blogSource) {
+            } else if (BlogSource.CSDN.getValue() == blogSource) {
 
             }
 
             List<String> blogUrlList = AliyunBlogService.getBlogURLFromPage(url);
             if (!CollectionUtils.isEmpty(blogUrlList)) {
                 for (String blogUrl : blogUrlList) {
-                    if (StringUtils.isEmpty(blogUrl)) {
-                        continue;
-                    }
-                    if(StringUtils.isNotEmpty(url) && redisService.get(url)!=null) {
-                        continue;
-                    }
-                    redisService.set(url, url);
-                    Msg msg = new Msg();
-                    msg.setMsgType(MsgType.BLOG_ADD);
-                    msg.setBody(blogUrl);
-                    msg.setQueueName(QueueName.QUEUE_BLOG_URL_PARSE);
-                    linkProvider.send(msg);
+                    linkTask.send(blogUrl);
                 }
             }
             logger.info("[LINK解析线程] 完成, threadName={}, url={}", threadName, url);
