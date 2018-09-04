@@ -13,6 +13,7 @@ import com.wind.blog.model.emun.MsgType;
 import com.wind.blog.model.emun.QueueName;
 import com.wind.blog.msg.Msg;
 import com.wind.blog.rabbitmq.LinkProvider;
+import com.wind.blog.redis.RedisService;
 import com.wind.blog.service.BlogService;
 import com.wind.blog.service.LinkService;
 import com.wind.blog.task.AliyunTask;
@@ -22,16 +23,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LinkThread implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(LinkThread.class);
+
+    private RedisService redisService;
 
     private LinkProvider linkProvider;
 
@@ -45,7 +45,8 @@ public class LinkThread implements Runnable {
 
     public static final int THREAD_MAX_SIZE = 10;
 
-    public LinkThread(LinkProvider linkProvider, String url, int blogSource) {
+    public LinkThread(RedisService redisService, LinkProvider linkProvider, String url, int blogSource) {
+        this.redisService = redisService;
         this.blogSource = blogSource;
         this.linkProvider = linkProvider;
         this.url = url;
@@ -75,11 +76,10 @@ public class LinkThread implements Runnable {
                     if (StringUtils.isEmpty(blogUrl)) {
                         continue;
                     }
-
-                    boolean exists = false;
-                    if(exists) {
+                    if(StringUtils.isNotEmpty(url) && redisService.get(url)!=null) {
                         continue;
                     }
+                    redisService.set(url, url);
                     Msg msg = new Msg();
                     msg.setMsgType(MsgType.BLOG_ADD);
                     msg.setBody(blogUrl);

@@ -43,6 +43,16 @@ public class AliyunBlogService {
     }
 
     /**
+     * 获取分页URL
+     * @param catalog 分类
+     * @param pageNum 分页
+     * @return 返回结果
+     */
+    public static String getUrl(String catalog, int pageNum) {
+        return "https://www.aliyun.com/jiaocheng/" + catalog + "-" + pageNum + ".html";
+    }
+
+    /**
      * url 解析 blog
      *
      * @param url 链接
@@ -124,20 +134,4 @@ public class AliyunBlogService {
         String regx = "<" + tag + "[ a-zA-Z0-9=_\"]*>(.*?)</" + tag + ">|<" + tag + "/>";
         return content.replaceAll(regx, "");
     }
-
-    // public void main(String[] args) {
-    // List<String> urls = getBlogURLFromPage("https://www.aliyun.com/jiaocheng/java?spm=5176.100033.1.3.DtWFa4");
-    // if (!CollectionUtils.isEmpty(urls)) {
-    // for (String url : urls) {
-    // if (url != null) {
-    // Blog blog = getBlogFromUrl(url);
-    // if (blog != null) {
-    // System.out.println(JSONObject.toJSON(blog));
-    // }
-    // System.out.println("----------------------------------" + blog.getSummary().length());
-    // }
-    // }
-    // }
-    // }
-
 }

@@ -6,6 +6,7 @@ import com.wind.blog.mapper.BlogMapperEx;
 import com.wind.blog.mapper.LinkMapperEx;
 import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.rabbitmq.LinkProvider;
+import com.wind.blog.redis.RedisService;
 import com.wind.blog.service.BlogService;
 import com.wind.blog.service.LinkService;
 import com.wind.blog.thread.LinkThread;
@@ -34,10 +35,13 @@ public class LinkTask {
      * 
      * @param linkProvider linkProvider
      */
-    public void parseBlogUrl(LinkProvider linkProvider, BlogSource blogSource) {
+    public void parseBlogUrl(RedisService redisService, LinkProvider linkProvider, BlogSource blogSource) {
         List<String> catalogList = AliyunBlogService.catalogList;
-        for (int i = 0; i < catalogList.size(); i++) {
-            parseBlogUrlByCatalog(linkProvider, catalogList.get(i), blogSource);
+        for(String catalog: catalogList) {
+            if(StringUtils.isEmpty(catalog)) {
+                continue;
+            }
+            parseBlogUrlByCatalog(redisService, linkProvider, catalog, blogSource);
         }
     }
 
@@ -47,8 +51,7 @@ public class LinkTask {
      * @param linkProvider linkProvider
      * @param catalog 分类
      */
-    private void parseBlogUrlByCatalog(LinkProvider linkProvider, String catalog, BlogSource blogSource) {
-
+    private void parseBlogUrlByCatalog(RedisService redisService, LinkProvider linkProvider, String catalog, BlogSource blogSource) {
         if (blogSource == null || (blogSource != BlogSource.ALIYUN) && blogSource != BlogSource.CSDN) {
             logger.error("[LINK任务] blogSource 不正确, 参数: blogSource={}", blogSource);
             return;
@@ -69,12 +72,12 @@ public class LinkTask {
                         Thread.sleep(100);
                     }
                     if (blogSource == BlogSource.ALIYUN) {
-                        url = "https://www.aliyun.com/jiaocheng/" + catalog + "-" + (++num) + ".html";
+                        url = AliyunBlogService.getUrl(catalog, ++num);
                     }
                     if (!HttpUtil.checkUrlEnable(url)) {
                         break;
                     }
-                    Thread linkTaskThread = new Thread(new LinkThread(linkProvider, url, blogSource.getValue()));
+                    Thread linkTaskThread = new Thread(new LinkThread(redisService, linkProvider, url, blogSource.getValue()));
                     linkTaskThread.setName("[LinkTask-" + LinkTask.threadNum + "]");
                     linkTaskThread.start();
                 }
@@ -84,5 +87,4 @@ public class LinkTask {
         }
         logger.error("[LINK任务] 解析完成, 参数: catalog={}", catalog);
     }
-
 }
