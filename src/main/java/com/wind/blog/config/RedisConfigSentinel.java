@@ -1,4 +1,4 @@
-package com.wind.blog.redis;
+package com.wind.blog.config;
 
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 
@@ -8,8 +8,8 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
  * @author qianchun 2018/9/4
  **/
 //@Service
-//@ConfigurationProperties(prefix = "redis")
-public class RedisConfigCluster extends CachingConfigurerSupport {
+public class RedisConfigSentinel extends CachingConfigurerSupport {
+
 //    @Value("${redis.maxIdle}")
 //    private String hostName;
 //
@@ -54,6 +54,7 @@ public class RedisConfigCluster extends CachingConfigurerSupport {
 //
 //    /**
 //     * JedisPoolConfig 连接池
+//     *
 //     * @return JedisPoolConfig
 //     */
 //    @Bean
@@ -78,42 +79,43 @@ public class RedisConfigCluster extends CachingConfigurerSupport {
 //        jedisPoolConfig.setTestWhileIdle(testWhileIdle);
 //        return jedisPoolConfig;
 //    }
+//
 //    /**
-//     * Redis集群的配置
-//     * @return RedisClusterConfiguration
+//     * 配置redis的哨兵
+//     *
+//     * @return RedisSentinelConfiguration
 //     */
 //    @Bean
-//    public RedisClusterConfiguration redisClusterConfiguration(){
-//        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
-//        //Set<RedisNode> clusterNodes
-//        String[] serverArray = clusterNodes.split(",");
-//
-//        Set<RedisNode> nodes = new HashSet<RedisNode>();
-//
-//        for(String ipPort:serverArray){
-//            String[] ipAndPort = ipPort.split(":");
-//            nodes.add(new RedisNode(ipAndPort[0].trim(),Integer.valueOf(ipAndPort[1])));
-//        }
-//
-//        redisClusterConfiguration.setClusterNodes(nodes);
-//        redisClusterConfiguration.setMaxRedirects(mmaxRedirectsac);
-//
-//        return redisClusterConfiguration;
+//    public RedisSentinelConfiguration sentinelConfiguration() {
+//        RedisSentinelConfiguration redisSentinelConfiguration = new RedisSentinelConfiguration();
+//        // 配置matser的名称
+//        RedisNode redisNode = new RedisNode(hostName, port);
+//        redisNode.setName("mymaster");
+//        redisSentinelConfiguration.master(redisNode);
+//        // 配置redis的哨兵sentinel
+//        RedisNode senRedisNode = new RedisNode(senHost1, senPort1);
+//        Set<RedisNode> redisNodeSet = new HashSet<>();
+//        redisNodeSet.add(senRedisNode);
+//        redisSentinelConfiguration.setSentinels(redisNodeSet);
+//        return redisSentinelConfiguration;
 //    }
+//
 //    /**
 //     * 配置工厂
-//     * JedisConnectionFactory
+//     *
 //     * @param jedisPoolConfig jedisPoolConfig
-//     * @param redisClusterConfiguration redisClusterConfiguration
+//     * @param sentinelConfig sentinelConfig
 //     * @return JedisConnectionFactory
 //     */
 //    @Bean
-//    public JedisConnectionFactory JedisConnectionFactory(JedisPoolConfig jedisPoolConfig,RedisClusterConfiguration redisClusterConfiguration){
-//        return new JedisConnectionFactory(redisClusterConfiguration,jedisPoolConfig);
+//    public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig,
+//            RedisSentinelConfiguration sentinelConfig) {
+//        return new JedisConnectionFactory(sentinelConfig, jedisPoolConfig);
 //    }
 //
 //    /**
 //     * 实例化 RedisTemplate 对象
+//     *
 //     * @param redisConnectionFactory redisConnectionFactory
 //     * @return redisTemplate
 //     */
@@ -123,6 +125,7 @@ public class RedisConfigCluster extends CachingConfigurerSupport {
 //        initDomainRedisTemplate(redisTemplate, redisConnectionFactory);
 //        return redisTemplate;
 //    }
+//
 //    /**
 //     * 设置数据存入 redis 的序列化方式,并开启事务
 //     *
@@ -131,7 +134,7 @@ public class RedisConfigCluster extends CachingConfigurerSupport {
 //     */
 //    @SuppressWarnings("all")
 //    private void initDomainRedisTemplate(RedisTemplate<String, Object> redisTemplate, RedisConnectionFactory factory) {
-//        //如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！
+//        // 如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！
 //        redisTemplate.setKeySerializer(new StringRedisSerializer());
 //        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 //        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());

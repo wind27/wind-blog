@@ -1,4 +1,4 @@
-package com.wind.blog.aliyun;
+package com.wind.blog.source.aliyun;
 
 import com.wind.blog.model.Blog;
 import com.wind.blog.model.emun.BlogSource;
@@ -17,12 +17,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * AliyunBlogService
+ * AliyunParser 解析器
  *
  * @author qianchun 2018/8/28
  **/
-public class AliyunBlogService {
-    private final static Logger logger = LoggerFactory.getLogger(AliyunBlogService.class);
+public class AliyunParser {
+    private final static Logger logger = LoggerFactory.getLogger(AliyunParser.class);
 
     public static final List<String> catalogList = new ArrayList<>();
 

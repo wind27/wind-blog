@@ -1,4 +1,4 @@
-package com.wind.blog.rabbitmq;
+package com.wind.blog.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

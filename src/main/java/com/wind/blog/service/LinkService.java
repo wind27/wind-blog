@@ -1,16 +1,12 @@
 package com.wind.blog.service;
 
-import com.alibaba.fastjson.JSONObject;
-import com.wind.blog.common.RabbitMqConfig;
 import com.wind.blog.mapper.LinkMapperEx;
 import com.wind.blog.model.Link;
-import com.wind.blog.msg.Msg;
-import com.wind.blog.redis.RedisService;
+import com.wind.blog.service.base.RedisService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**

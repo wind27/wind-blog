@@ -247,5 +247,5 @@ public class Constant {
 
 
     public static final int THREAD_MAX_SIZE = 10;
-    public static String ALIYUN_REGEX = "https://www.aliyun.com/jiaocheng/java-[0-9]+.html";
+    public static String ALIYUN_REGEX = "https://www.aliyun.com/jiaocheng/[a-zA-Z0-9]+-[0-9]+.html";
 }

@@ -1,4 +1,4 @@
-package com.wind.blog.redis;
+package com.wind.blog.service.base;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.wind.blog.msg;
+package com.wind.blog.model.rabbitmq;
 
 import java.io.Serializable;
 

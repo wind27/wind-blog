@@ -1,10 +1,11 @@
 package com.wind.blog.controller;
 
 import com.wind.blog.model.emun.BlogSource;
-import com.wind.blog.rabbitmq.RabbitmqConfig;
-import com.wind.blog.redis.RedisService;
+import com.wind.blog.config.RabbitmqConfig;
+import com.wind.blog.service.base.RedisService;
 import com.wind.blog.service.LinkService;
 import com.wind.blog.task.LinkTask;
+import com.wind.blog.thread.LinkParseService;
 import com.wind.commons.ErrorCode;
 import com.wind.utils.JsonResponseUtil;
 import org.slf4j.Logger;
@@ -26,13 +27,8 @@ public class TaskController {
     private RedisService redisService;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private LinkParseService linkParseService;
 
-    @Autowired
-    private RabbitmqConfig linkProvider;
-
-    @Autowired
-    private LinkService linkService;
 
     // @Autowired
     // private AliyunBlogService aliyunBlogService;
@@ -72,7 +68,7 @@ public class TaskController {
             if (!BlogSource.ALIYUN.getValue().equals(blogSource)) {
                 return JsonResponseUtil.fail(ErrorCode.PARAM_ERROR);
             }
-            new LinkTask(rabbitTemplate, redisService).parseBlogUrl(BlogSource.ALIYUN);
+            linkParseService.start(BlogSource.ALIYUN);
             return JsonResponseUtil.ok();
         } catch (Exception e) {
             logger.error("[LINK任务] 录入link异常, 参数: url={");
@@ -89,10 +85,10 @@ public class TaskController {
                 redisService.set(key, value);
             }
             value = (String) redisService.get(key);
-            logger.info("[REDIS] key={}, value={}", key, value);
+            logger.info("[LINK任务] key={}, value={}", key, value);
             return JsonResponseUtil.ok();
         } catch (Exception e) {
-            logger.error("[REDIS] 异常, e={}", e);
+            logger.error("[LINK任务] 异常, e={}", e);
             return JsonResponseUtil.fail(ErrorCode.SYS_ERROR);
         }
     }

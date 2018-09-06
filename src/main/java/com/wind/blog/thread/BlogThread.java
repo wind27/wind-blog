@@ -1,6 +1,6 @@
 package com.wind.blog.thread;
 
-import com.wind.blog.aliyun.AliyunBlogService;
+import com.wind.blog.source.aliyun.AliyunParser;
 import com.wind.blog.common.Constant;
 import com.wind.blog.model.Blog;
 import com.wind.blog.model.Link;
@@ -69,7 +69,7 @@ public class BlogThread implements Runnable {
 
                 Blog blog = null;
                 if(blogSource == BlogSource.ALIYUN) {
-                    blog = AliyunBlogService.getBlogFromUrl(url);
+                    blog = AliyunParser.getBlogFromUrl(url);
                 } else if(blogSource == BlogSource.CSDN) {
 
                 }
