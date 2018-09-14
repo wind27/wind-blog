@@ -5,12 +5,14 @@ import com.wind.blog.model.Blog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * BlogService
  *
  * @author qianchun 2018/9/3
  **/
+@Service
 public class BlogService {
     private final static Logger logger = LoggerFactory.getLogger(BlogService.class);
 

@@ -1,30 +1,24 @@
 package com.wind.blog.service.base;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wind.blog.common.RabbitMqConfig;
-import com.wind.blog.model.emun.MsgType;
-import com.wind.blog.model.emun.QueueName;
+import com.rabbitmq.client.Channel;
+import com.wind.blog.config.RabbitMqConfig;
+import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.rabbitmq.Msg;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
+import com.wind.blog.thread.BlogParseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * RedisService
@@ -38,6 +32,15 @@ public class RabbitmqService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private ConnectionFactory connectionFactory;
+
+    @Autowired
+    private BlogParseService blogParseService;
+
+    @Autowired
+    public Queue userQueue;
+
     /**
      * 发送消息
      *
@@ -45,8 +48,32 @@ public class RabbitmqService {
      */
     public void send(Msg msg) {
         rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_DIRECT_BLOGLINKPARSE,
-                RabbitMqConfig.ROUTING_BLOGLINKPARSE, JSONObject.toJSON(msg));
-        logger.info("[RABBITMQ] send msg: {}", JSONObject.toJSON(msg));
+                RabbitMqConfig.ROUTING_BLOGLINKPARSE, JSONObject.toJSONString(msg));
+        logger.info("[RABBITMQ] send msg: {}", msg);
     }
 
+    @Bean
+    public SimpleMessageListenerContainer messageContainer() {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory);
+        container.setQueues(userQueue);
+        container.setExposeListenerChannel(true);
+        container.setMaxConcurrentConsumers(1);
+        container.setConcurrentConsumers(1);
+        container.setAcknowledgeMode(AcknowledgeMode.MANUAL); // 设置确认模式手工确认
+        container.setMessageListener(new ChannelAwareMessageListener() {
+            @Override
+            public void onMessage(Message message, Channel channel) throws Exception {
+                byte[] body = message.getBody();
+                logger.info("receive msg : " + new String(body));
+                JSONObject json = (JSONObject) JSON.parse(body);
+                Msg msg = json.getObject("msg", Msg.class);
+
+                if (msg != null) {
+                    blogParseService.start(msg.getBody(), BlogSource.ALIYUN);
+                }
+                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 确认消息成功消费
+            }
+        });
+        return container;
+    }
 }

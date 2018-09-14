@@ -90,9 +90,9 @@ public class LinkParseService {
                 if (!HttpUtil.checkUrlEnable(url)) {
                     break;
                 }
-                if (num > 10) {
-                    break;
-                }
+//                if (num > 10) {
+//                    break;
+//                }
                 this.parseAndSendMsg(url, blogSource);
             } catch (Exception e) {
                 logger.error("[LINK任务] link 解析异常, 参数: url={}", url);
@@ -124,9 +124,11 @@ public class LinkParseService {
                     if (StringUtils.isEmpty(blogUrl)) {
                         return;
                     }
-                    if (redisService.get(blogUrl) != null) {
-                        return;
-                    }
+//                    if (redisService.get(blogUrl) != null) {
+//                        return;
+//                    }
+
+                    Thread.sleep(100);
                     redisService.set(blogUrl, blogUrl);
                     Msg msg = new Msg();
                     msg.setMsgType(MsgType.BLOG_ADD);

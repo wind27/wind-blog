@@ -1,16 +1,12 @@
 package com.wind.blog.controller;
 
 import com.wind.blog.model.emun.BlogSource;
-import com.wind.blog.config.RabbitmqConfig;
 import com.wind.blog.service.base.RedisService;
-import com.wind.blog.service.LinkService;
-import com.wind.blog.task.LinkTask;
 import com.wind.blog.thread.LinkParseService;
 import com.wind.commons.ErrorCode;
 import com.wind.utils.JsonResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
