@@ -1,22 +1,7 @@
-/*
- Navicat Premium Data Transfer
+DROP DATABASE if EXISTS wind_blog;
+CREATE DATABASE wind_blog charset utf8mb4 COLLATE utf8mb4_unicode_ci;
 
- Source Server         : dev.wind.com
- Source Server Type    : MySQL
- Source Server Version : 50722
- Source Host           : dev.wind.com
- Source Database       : wind_blog
-
- Target Server Type    : MySQL
- Target Server Version : 50722
- File Encoding         : utf-8
-
- Date: 08/28/2018 20:14:45 PM
-*/
-
-SET NAMES utf8;
-SET FOREIGN_KEY_CHECKS = 0;
-
+USE `wind_blog`;
 -- ----------------------------
 --  Table structure for `blog`
 -- ----------------------------
@@ -29,6 +14,7 @@ CREATE TABLE `blog` (
   `content` text NOT NULL COMMENT '内容',
   `summary` varchar(255) NOT NULL DEFAULT '' COMMENT '摘要',
   `uid` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id：0、表示网上爬取',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：1、编辑,2 发布, 3 删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `publish_time` timestamp NULL DEFAULT NULL COMMENT '发布时间',
@@ -47,5 +33,3 @@ CREATE TABLE `link` (
   `blog_id` bigint(20) DEFAULT NULL COMMENT 'blog id ',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-SET FOREIGN_KEY_CHECKS = 1;

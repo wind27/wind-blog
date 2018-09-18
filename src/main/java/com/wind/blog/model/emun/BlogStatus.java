@@ -6,7 +6,7 @@ package com.wind.blog.model.emun;
  */
 public enum BlogStatus {
 
-    EDIT("edit", 1), PUBLISH("publish", 2), DISABLE("disable", 3);
+    EDIT("edit", 1), PUBLISH("publish", 2), DISABLE("delete", 3);
 
     private String type;
 

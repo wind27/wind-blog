@@ -31,16 +31,16 @@ public class ScheduleTask {
     @Autowired
     private RabbitmqService rabbitmqService;
 
-    @Scheduled(initialDelay = 100, fixedDelay = 60000)
-    private void linkTask() {
-        while (true) {
-            String date = DateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
-            logger.info("[SCHEDULE] LINK start date:" + date);
-            linkParseService.start(BlogSource.ALIYUN);
-            date = DateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
-            logger.info("[SCHEDULE] LINK date:" + date);
-        }
-    }
+//    @Scheduled(initialDelay = 100, fixedDelay = 60000)
+//    private void linkTask() {
+//        while (true) {
+//            String date = DateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
+//            logger.info("[SCHEDULE] LINK start date:" + date);
+//            linkParseService.start(BlogSource.ALIYUN);
+//            date = DateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
+//            logger.info("[SCHEDULE] LINK date:" + date);
+//        }
+//    }
 
 
 

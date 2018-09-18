@@ -72,21 +72,20 @@ public class TaskController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping(value = "redis", method = RequestMethod.GET)
-    public String redis(@RequestParam("key") String key, @RequestParam("value") String value) {
-        try {
-            Object v = redisService.get(key);
-            if (v == null) {
-                redisService.set(key, value);
-            }
-            value = (String) redisService.get(key);
-            logger.info("[LINK任务] key={}, value={}", key, value);
-            return JsonResponseUtil.ok();
-        } catch (Exception e) {
-            logger.error("[LINK任务] 异常, e={}", e);
-            return JsonResponseUtil.fail(ErrorCode.SYS_ERROR);
-        }
-    }
-
+//    @ResponseBody
+//    @RequestMapping(value = "redis", method = RequestMethod.GET)
+//    public String redis(@RequestParam("key") String key, @RequestParam("value") String value) {
+//        try {
+//            Object v = redisService.get(key);
+//            if (v == null) {
+//                redisService.set(key, value);
+//            }
+//            value = (String) redisService.get(key);
+//            logger.info("[LINK任务] key={}, value={}", key, value);
+//            return JsonResponseUtil.ok();
+//        } catch (Exception e) {
+//            logger.error("[LINK任务] 异常, e={}", e);
+//            return JsonResponseUtil.fail(ErrorCode.SYS_ERROR);
+//        }
+//    }
 }

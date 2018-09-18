@@ -19,6 +19,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * RedisService
@@ -64,11 +65,15 @@ public class RabbitmqService {
             @Override
             public void onMessage(Message message, Channel channel) throws Exception {
                 byte[] body = message.getBody();
-                logger.info("receive msg : " + new String(body));
-                JSONObject json = (JSONObject) JSON.parse(body);
-                Msg msg = json.getObject("msg", Msg.class);
-
+                if(body == null) {
+                    return ;
+                }
+                String content = new String(body);
+                logger.info("receive msg : " + content);
+                JSONObject json = JSONObject.parseObject(content);
+                Msg msg = JSONObject.toJavaObject(json, Msg.class);
                 if (msg != null) {
+                    Thread.sleep(1000);
                     blogParseService.start(msg.getBody(), BlogSource.ALIYUN);
                 }
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 确认消息成功消费

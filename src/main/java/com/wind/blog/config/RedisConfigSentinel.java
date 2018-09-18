@@ -1,14 +1,12 @@
 package com.wind.blog.config;
 
-import org.springframework.cache.annotation.CachingConfigurerSupport;
-
 /**
  * RedisConfig
  *
  * @author qianchun 2018/9/4
  **/
 //@Service
-public class RedisConfigSentinel extends CachingConfigurerSupport {
+public class RedisConfigSentinel /*extends CachingConfigurerSupport*/ {
 
 //    @Value("${redis.maxIdle}")
 //    private String hostName;

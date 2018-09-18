@@ -25,9 +25,9 @@ spring:
   datasource:
     url: jdbc:mysql://mysql:3306/wind_blog?useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: Dev123@wind.COM
     driver-class-name: com.mysql.jdbc.Driver
 
 server:
-  port: 8080
+  port: 8077
 
