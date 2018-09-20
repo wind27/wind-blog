@@ -3,6 +3,7 @@ package com.wind.blog.service.base;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.Channel;
+import com.wind.blog.common.RedisKey;
 import com.wind.blog.config.RabbitMqConfig;
 import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.rabbitmq.Msg;
@@ -42,6 +43,9 @@ public class RabbitmqService {
     @Autowired
     public Queue userQueue;
 
+    @Autowired
+    private RedisService redisService;
+
     /**
      * 发送消息
      *
@@ -68,13 +72,26 @@ public class RabbitmqService {
                 if(body == null) {
                     return ;
                 }
+
                 String content = new String(body);
                 logger.info("receive msg : " + content);
                 JSONObject json = JSONObject.parseObject(content);
                 Msg msg = JSONObject.toJavaObject(json, Msg.class);
-                if (msg != null) {
-                    Thread.sleep(1000);
-                    blogParseService.start(msg.getBody(), BlogSource.ALIYUN);
+                if (msg == null) {
+                    return;
+                }
+
+                String blogUrl = msg.getBody();
+                //判断是否已经存在
+                boolean exists = redisService.sHasKey(RedisKey.TASK_LINK_URL_LIST, blogUrl);
+                if(exists) {
+                    return ;
+                }
+                redisService.sSet(RedisKey.TASK_LINK_URL_LIST, blogUrl);
+                Thread.sleep(1000);
+                boolean flag = blogParseService.start(msg.getBody(), BlogSource.ALIYUN);
+                if (flag) {
+                    redisService.sSet(RedisKey.TASK_LINK_URL_LIST, blogUrl);
                 }
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 确认消息成功消费
             }

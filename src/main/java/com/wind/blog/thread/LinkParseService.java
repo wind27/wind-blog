@@ -1,6 +1,7 @@
 package com.wind.blog.thread;
 
 import com.wind.blog.common.Constant;
+import com.wind.blog.common.RedisKey;
 import com.wind.blog.model.emun.BlogSource;
 import com.wind.blog.model.emun.MsgType;
 import com.wind.blog.model.emun.QueueName;
@@ -10,12 +11,12 @@ import com.wind.blog.service.base.RedisService;
 import com.wind.blog.source.aliyun.AliyunParser;
 import com.wind.blog.source.csdn.CSDNParser;
 import com.wind.blog.utils.HttpUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,15 @@ public class LinkParseService {
     @Autowired
     private RedisService redisService;
 
+    private static List<BlogSource> blogSourceList = new ArrayList<>();
+
+    static {
+        blogSourceList.add(BlogSource.ALIYUN);
+        blogSourceList.add(BlogSource.CSDN);
+    }
+
     /**
-     * 开始解析该 blogSource 下, 按照 catalog(分类),
-     * 解析各个分类下的blog URL 并发送 rabbitmq
+     * 开始解析该 blogSource 下, 按照 catalog(分类), 解析各个分类下的blog URL 并发送 rabbitmq
      *
      * @param blogSource blogSource
      */
@@ -50,7 +57,7 @@ public class LinkParseService {
             return;
         }
 
-        if (CollectionUtils.isEmpty(catalogList)) {
+        if (CollectionUtils.isNotEmpty(catalogList)) {
             logger.error("[LINK任务] catalog为空, blogSource={}", blogSource);
             return;
         }
@@ -69,7 +76,7 @@ public class LinkParseService {
      * @param catalog 分类
      */
     private void parseByCatalog(String catalog, BlogSource blogSource) {
-        if (blogSource == null || (blogSource != BlogSource.ALIYUN) && blogSource != BlogSource.CSDN) {
+        if (blogSource == null || (blogSourceList.contains(blogSource))) {
             logger.error("[LINK任务] blogSource 不正确, 参数: blogSource={}", blogSource);
             return;
         }
@@ -87,13 +94,10 @@ public class LinkParseService {
                 if (blogSource == BlogSource.ALIYUN) {
                     url = AliyunParser.getUrl(catalog, ++num);// 分页URL
                 }
-                if (!HttpUtil.checkUrlEnable(url)) {
+                boolean flag = this.parseAndSendMsg(url, blogSource);
+                if(!flag) {
                     break;
                 }
-//                if (num > 10) {
-//                    break;
-//                }
-                this.parseAndSendMsg(url, blogSource);
             } catch (Exception e) {
                 logger.error("[LINK任务] link 解析异常, 参数: url={}", url);
             }
@@ -103,14 +107,15 @@ public class LinkParseService {
 
     /**
      * 解析BLOG的URL, 封装MSG, 发送rabbitmq
+     * 
      * @param url 带解析的分页URL
      * @param blogSource BLOG来源
      */
-    private void parseAndSendMsg(String url, BlogSource blogSource) {
+    private boolean parseAndSendMsg(String url, BlogSource blogSource) {
         try {
             if (StringUtils.isEmpty(url)) {
                 logger.error("[LINK解析] 参数错误, url={}", url);
-                return;
+                return false;
             }
             // 处理URL
             if (BlogSource.ALIYUN == blogSource) {
@@ -119,27 +124,30 @@ public class LinkParseService {
 
             }
             List<String> blogUrlList = AliyunParser.getBlogURLFromPage(url);
-            if (!CollectionUtils.isEmpty(blogUrlList)) {
-                for (String blogUrl : blogUrlList) {
-                    if (StringUtils.isEmpty(blogUrl)) {
-                        return;
-                    }
-//                    if (redisService.get(blogUrl) != null) {
-//                        return;
-//                    }
-
-                    Thread.sleep(100);
-                    redisService.set(blogUrl, blogUrl);
-                    Msg msg = new Msg();
-                    msg.setMsgType(MsgType.BLOG_ADD);
-                    msg.setBody(blogUrl);
-                    msg.setQueueName(QueueName.QUEUE_BLOG_URL_PARSE);
-                    rabbitmqService.send(msg);
+            if (CollectionUtils.isEmpty(blogUrlList)) {
+                return false;
+            }
+            for (String blogUrl : blogUrlList) {
+                if (StringUtils.isEmpty(blogUrl)) {
+                    continue;
                 }
+                //判断是否已经存在
+                boolean exists = redisService.sHasKey(RedisKey.TASK_LINK_URL_LIST, blogUrl);
+                if(exists) {
+                    continue;
+                }
+                Thread.sleep(100);
+                Msg msg = new Msg();
+                msg.setMsgType(MsgType.BLOG_ADD);
+                msg.setBody(blogUrl);
+                msg.setQueueName(QueueName.QUEUE_BLOG_URL_PARSE);
+                rabbitmqService.send(msg);
             }
             logger.info("[LINK解析] 完成, url={}", url);
+            return true;
         } catch (Exception e) {
             logger.error("[LINK解析] 异常, url={}", url, e);
+            return false;
         }
     }
 

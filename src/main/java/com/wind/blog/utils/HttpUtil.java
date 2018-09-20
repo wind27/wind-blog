@@ -1,6 +1,7 @@
 package com.wind.blog.utils;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
@@ -18,7 +19,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.SSLContext;
@@ -148,7 +148,7 @@ public class HttpUtil {
 
         try {
             httpPost.setConfig(requestConfig);
-            if (!CollectionUtils.isEmpty(headers)) {
+            if (headers!=null && CollectionUtils.isNotEmpty(headers.keySet())) {
                 for (String key : headers.keySet()) {
                     if (key != null) {
                         httpPost.addHeader(key, headers.get(key));

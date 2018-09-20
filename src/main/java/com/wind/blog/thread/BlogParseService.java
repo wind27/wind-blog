@@ -29,17 +29,11 @@ public class BlogParseService {
      * @param url 链接地址
      * @param blogSource blog 来源
      */
-    public void start(String url, BlogSource blogSource) {
+    public boolean start(String url, BlogSource blogSource) {
         try {
             if (StringUtils.isEmpty(url)) {
                 logger.error("[BLOG解析] 参数错误, url={}", url);
-                return;
-            }
-
-            boolean exists = false;
-            if (exists) {
-                logger.info("[BLOG解析] 已存在, url={}", url);
-                return;
+                return false;
             }
 
             // 如果URL是 csdn blog 的文章地址, 则爬取文章地址, 并将文章信息录入库中
@@ -59,15 +53,17 @@ public class BlogParseService {
 
                 if (blog == null) {
                     logger.info("[BLOG解析] 解析失败, url={}", url);
-                    return;
+                    return false;
                 }
                 blogService.add(blog);
                 link.setBlogId(blog.getId());
                 linkService.add(link);
             }
             logger.info("[BLOG解析] 完成, url={}", url);
+            return true;
         } catch (Exception e) {
             logger.error("[BLOG解析] 异常, url={}, 异常={}", url, e);
+            return false;
         }
     }
 
