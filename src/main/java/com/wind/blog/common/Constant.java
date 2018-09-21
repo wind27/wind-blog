@@ -142,9 +142,12 @@ public class Constant {
         public static final int YES = 1;//特别关注
         public static final int NO = 0;//非特别关注
     }
-    
-    
-    public static final int LIMIT_50 = 0;
+
+    public static final int LIMIT_20 = 20;
+
+    public static final int LIMIT_30 = 30;
+
+    public static final int LIMIT_50 = 50;
     
     public class MongoSort {
     	public static final int DESC = -1;
