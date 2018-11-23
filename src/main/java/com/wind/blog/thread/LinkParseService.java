@@ -57,7 +57,7 @@ public class LinkParseService {
             return;
         }
 
-        if (CollectionUtils.isNotEmpty(catalogList)) {
+        if (CollectionUtils.isEmpty(catalogList)) {
             logger.error("[LINK任务] catalog为空, blogSource={}", blogSource);
             return;
         }
@@ -76,7 +76,7 @@ public class LinkParseService {
      * @param catalog 分类
      */
     private void parseByCatalog(String catalog, BlogSource blogSource) {
-        if (blogSource == null || (blogSourceList.contains(blogSource))) {
+        if (blogSource == null || !blogSourceList.contains(blogSource)) {
             logger.error("[LINK任务] blogSource 不正确, 参数: blogSource={}", blogSource);
             return;
         }
@@ -95,7 +95,7 @@ public class LinkParseService {
                     url = AliyunParser.getUrl(catalog, ++num);// 分页URL
                 }
                 boolean flag = this.parseAndSendMsg(url, blogSource);
-                if(!flag) {
+                if(!flag || num>10) {
                     break;
                 }
             } catch (Exception e) {

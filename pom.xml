@@ -31,6 +31,8 @@
 		<apollo-client-version>0.11.0-SNAPSHOT</apollo-client-version>
 		<spring-boot-mybatis-version>1.3.2</spring-boot-mybatis-version>
 		<spring-boot-version>1.5.8.RELEASE</spring-boot-version>
+
+		<elasticsearch-version>6.4.0</elasticsearch-version>
 	</properties>
 
 	<dependencies>
@@ -60,11 +62,11 @@
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 			<version>${spring-boot-version}</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 			<version>${spring-boot-version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
@@ -77,6 +79,48 @@
 			<version>${spring-boot-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<!--<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>-->
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+		</dependency>
+
+
+		<!-- test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+		</dependency>
 
 		<!-- wind commons -->
 		<dependency>
@@ -106,6 +150,32 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
 		</dependency>
+
+		<!-- es -->
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>${elasticsearch-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>transport</artifactId>
+			<version>${elasticsearch-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>elasticsearch-rest-high-level-client</artifactId>
+			<version>${elasticsearch-version}</version>
+		</dependency>
+
+		<!-- okhttp3 -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.8.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${jarTarget}</directory>
@@ -132,6 +202,38 @@
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals><goal>shade</goal></goals>
+						<configuration>
+							<relocations>
+								<relocation>
+									<pattern>org.apache.http</pattern>
+									<shadedPattern>hidden.org.apache.http</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.apache.logging</pattern>
+									<shadedPattern>hidden.org.apache.logging</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.apache.commons.codec</pattern>
+									<shadedPattern>hidden.org.apache.commons.codec</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.apache.commons.logging</pattern>
+									<shadedPattern>hidden.org.apache.commons.logging</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

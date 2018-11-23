@@ -40,16 +40,16 @@ public class ScheduleTask {
     /**
      * blog link 跑批任务
      */
-    @Scheduled(initialDelay = 100, fixedDelay = 60000)
-    private void blogTask() {
-        try {
-            int blogSource = BlogSource.ALIYUN.getValue();
-            if (!BlogSource.ALIYUN.getValue().equals(blogSource)) {
-                return ;
-            }
-            linkParseService.start(BlogSource.ALIYUN);
-        } catch (Exception e) {
-            logger.error("[LINK任务] 录入link异常, 参数: url={");
-        }
-    }
+//    @Scheduled(initialDelay = 100, fixedDelay = 60000)
+//    private void blogTask() {
+//        try {
+//            int blogSource = BlogSource.ALIYUN.getValue();
+//            if (!BlogSource.ALIYUN.getValue().equals(blogSource)) {
+//                return ;
+//            }
+//            linkParseService.start(BlogSource.ALIYUN);
+//        } catch (Exception e) {
+//            logger.error("[LINK任务] 录入link异常, 参数: url={");
+//        }
+//    }
 }

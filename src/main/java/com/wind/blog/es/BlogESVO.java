@@ -1,6 +1,5 @@
 package com.wind.blog.es;
 
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +9,7 @@ import java.util.Date;
  *
  * @author qianchun 2018/9/21
  **/
-@Document(indexName = "blog", type = "blog")
+//@Document(indexName = "blog", type = "blog")
 public class BlogESVO implements Serializable {
 
     private Long id;

@@ -94,7 +94,8 @@ public class Constant {
         public static final int DISABLE = 0;
         public static final int ENABLE = 1;
     }
-    
+
+
     /**
      * 逻辑删除状态
      * 
@@ -143,7 +144,7 @@ public class Constant {
         public static final int NO = 0;//非特别关注
     }
 
-    public static final int LIMIT_20 = 20;
+    public static final int LIMIT = 20;
 
     public static final int LIMIT_30 = 30;
 

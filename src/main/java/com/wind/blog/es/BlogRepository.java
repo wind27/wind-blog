@@ -1,6 +1,5 @@
 package com.wind.blog.es;
 
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @author qianchun 2018/9/21
  **/
 @Repository
-public interface BlogRepository extends ElasticsearchRepository<BlogESVO, Long> {
+public interface BlogRepository /*extends ElasticsearchRepository<BlogESVO, Long>*/ {
 
 
 }
