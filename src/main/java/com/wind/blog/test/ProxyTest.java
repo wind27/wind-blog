@@ -64,15 +64,15 @@ class ProxyHandler implements InvocationHandler {
  **/
 public class ProxyTest {
 
-    public static void main(String[] args) throws Exception {
-//        Subject sub = new SubjectProxy();
+//    public static void main(String[] args) throws Exception {
+////        Subject sub = new SubjectProxy();
+////        sub.doSomething();
+//
+//
+//
+//        ProxyHandler proxy = new ProxyHandler();
+//        //绑定该类实现的所有接口
+//        Subject sub = (Subject) proxy.bind(new RealSubject());
 //        sub.doSomething();
-
-
-
-        ProxyHandler proxy = new ProxyHandler();
-        //绑定该类实现的所有接口
-        Subject sub = (Subject) proxy.bind(new RealSubject());
-        sub.doSomething();
-    }
+//    }
 }
