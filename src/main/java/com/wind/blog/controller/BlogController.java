@@ -24,7 +24,7 @@ public class BlogController {
     private final static Logger logger = LoggerFactory.getLogger(BlogController.class);
 
     private static final String INDEX = "blog";
-    private static final String TYPE = Blog.class.getName();
+    private static final String TYPE = "doc";
 
     @Autowired
     private RestHighLevelClientService restHighLevelClientService;
