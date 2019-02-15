@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>表单管理</title>
+
+    <script language="javascript" src="/js/lib/jquery1.10.2.min.js"></script>
+    <script language="javascript" src="/js/form.js"></script>
+    <link rel="stylesheet" href="/css/form.css" type="text/css"/>
+
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<!-- 增加表单属性 -->
+<div id="field_add_container">
+    <form id="field_add_form">
+        <div id="field">
+            <div class="form-div-field">
+                <label for="name">添加字段:</label>
+                <input id="name" type="text"/>
+            </div>
+
+            <div class="form-div-field">
+                <label for="type">控件类型:</label>
+                <select id="type">
+                    <option value="1">文本框</option>
+                    <option value="2">下拉框</option>
+                    <option value="3">时间控件</option>
+                    <option value="4">附件</option>
+                </select>
+            </div>
+
+            <div class="form-div-field">
+                <label for="css">css样式:</label>
+                <input id="css" type="text"/>
+            </div>
+
+            <div class="form-div-field">
+                <label for="isShow">是否显示:</label>
+                <input id="isShow" type="text"/>
+            </div>
+
+            <div class="form-div-field">
+                <label for="defaultVal">默认值:</label>
+                <input id="defaultVal" type="text"/>
+            </div>
+        </div>
+        <div class="form-div-field">
+            <button id="submit">提交</button>
+            <button id="reset" onclick="form.reset()">重置</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+

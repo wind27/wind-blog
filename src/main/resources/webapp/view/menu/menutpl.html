@@ -1,0 +1,153 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="tpl_menu_list">
+    <script id="tpl_menu_list" type="text/template">
+        <div class="container_header_info">菜单列表</div>
+        <hr style="color: #987cb9;"/>
+        <form>
+            <input type="button" class="form_add_button" onclick="module.menu.add()" th:value="新增" />
+        </form>
+
+        <table border="1" cellpadding="3" cellspacing="0" style="">
+            <tr>
+                <th>名称</th>
+                <th>URL</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            {@each menus as menu,index}
+            <tr>
+                <td>${menu.name}</td>
+                <td>${menu.url}</td>
+                <td>
+                    {@if menu.status===1}启用{@else}停用{@/if}
+                </td>
+                <td>
+                    <a onclick="module.menu.edit('${menu.id}');">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.menu.detail('${menu.id}');">详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.menu.enable('${menu.id}');">启用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.menu.disable('${menu.id}');">停用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+            {@/each}
+        </table>
+    </script>
+</div>
+
+<div th:fragment="tpl_menu_add">
+    <script id="tpl_menu_add" type="text/template">
+        <div class="container_header_info">菜单新增<span onclick="module.menu.list()">返回</span></div>
+        <form id="form_menu_add">
+            <p>
+                <lable>菜单名称:</lable>
+                <input type="input" name="name"/>
+            </p>
+            <p>
+                <lable>所属应用:</lable>
+                <select name="appId">
+                    <option value="0">权限系统</option>
+                </select>
+            </p>
+            <p>
+                <lable>菜单URL:</lable>
+                <input type="input" name="url"/>
+            </p>
+            <!--<p>
+                <lable>父级菜单:</lable>
+                <select name="parentId">
+                    <option value="1">用户管理</option>
+                    <option value="2">菜单管理</option>
+                    <option value="3">用户组管理</option>
+                    <option value="4">角色管理</option>
+                    <option value="5">权限管理</option>
+                </select>
+            </p>-->
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态:</lable>
+                <select name="status">
+                    <option value="1">启用</option>
+                    <option value="0">禁用</option>
+                </select>
+            </p>
+            <p>
+                <input type="button" class="form_save_button" onclick="module.menu.save()" th:value="保存" />
+                <input type="button" class="form_reset_button" onclick="module.menu.reset()" th:value="重置" />
+            </p>
+        </form>
+    </script>
+</div>
+<div th:fragment="tpl_menu_edit">
+    <script id="tpl_menu_edit" type="text/template">
+        <div class="container_header_info">菜单编辑<span onclick="module.menu.list()">返回</span></div>
+        <hr/>
+        <form id="form_menu_edit" action="" method="post">
+            <input type="hidden" name="id" value="${id}"/>
+            <p>
+                <lable>菜单名称:</lable>
+                <input type="input" id="name" name="name" value="${name}"/>
+            </p>
+            <p>
+                <lable>所属应用:</lable>
+                <select name="appId">
+                    <option value="0">权限系统</option>
+                </select>
+            </p>
+            <p>
+                <lable>所属应用:</lable>
+                <select name="appId">
+                    <option value="0">权限系统</option>
+                </select>
+            </p>
+            <p>
+                <lable>菜单URL:</lable>
+                <input type="input" id="url" name="url" value="${url}"/>
+            </p>
+            <!--<p>
+                <lable>父级菜单:</lable>
+                <select name="parentId">
+                    <option value="1">用户管理</option>
+                    <option value="2">菜单管理</option>
+                    <option value="3">用户组管理</option>
+                    <option value="4">角色管理</option>
+                    <option value="5">权限管理</option>
+                </select>
+            </p>-->
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态:</lable>
+                <select name="status">
+                    <option value="1">启用</option>
+                    <option value="0">禁用</option>
+                </select>
+            </p>
+            <p>
+                <input type="button" class="form_save_button" onclick="module.menu.update()" th:value="保存" />
+                <input type="button" class="form_reset_button" onclick="module.menu.edit(${id})" th:value="重置" />
+            </p>
+        </form>
+    </script>
+</div>
+<div th:fragment="tpl_menu_detail">
+    <script id="tpl_menu_detail" type="text/template">
+        <div class="container_header_info">菜单详情<span onclick="module.menu.list()">返回</span></div>
+        <hr/>
+        <div class="container_detail_info">
+            <p>
+                <lable>菜单名称:</lable>
+                <span>${name}</span>
+            </p>
+            <p>
+                <lable>所属应用:</lable>
+                <span>${appId}</span>
+            </p>
+            <p>
+                <lable>菜单URL:</lable>
+                <span>${url}</span>
+            </p>
+            <!--<p>
+                <lable>父级菜单:</lable>
+                <span>${parentId}</span>
+            </p>-->
+            <p></p>
+        </div>
+    </script>
+</div>
+</html>

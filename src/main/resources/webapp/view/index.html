@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>首页</title>
+    <link th:href="@{'/css/common/common.css?v='+${v}}" rel="stylesheet"/>
+    <script src="/js/lib/require.js" data-main="/js/main.js?v=3sw122ss1s322112"  id="current-js" current-module ="" init-method="" async="true"></script>
+</head>
+<body>
+
+<!-- header start -->
+<div th:class="header" th:include="common/header :: header"></div>
+<!-- header end -->
+
+<!-- container start -->
+<div th:class="container">
+    <!--<span th:text="${name}+', welcome home page !!!'"></span>-->
+</div>
+<!-- container end -->
+
+<!-- footer start -->
+<div th:class="footer" th:include="common/footer :: copyright"></div>
+<!-- footer end -->
+</body>
+</html>

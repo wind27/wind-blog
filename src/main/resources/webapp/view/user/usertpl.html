@@ -1,0 +1,133 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="tpl_user_list">
+    <script id="tpl_user_list" type="text/template">
+        <div class="container_header_info">用户列表</div>
+        <hr style="color: #987cb9;"/>
+        <form>
+            <input type="button" class="form_add_button" onclick="module.user.add()" th:value="新增" />
+        </form>
+        <table border="1" cellpadding="3" cellspacing="0" style="">
+            <tr>
+                <th>用户名</th>
+                <th>真实姓名</th>
+                <th>手机号码</th>
+                <th>邮箱地址</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            {@each users as user,index}
+            <tr>
+                <td>${user.username}</td>
+                <td>${user.realname}</td>
+                <td>${user.mobile}</td>
+                <td>${user.email}</td>
+                <td>
+                    {@if user.status===1}启用{@else}停用{@/if}
+                </td>
+                <td>
+                    <a onclick="module.user.edit('${user.id}');">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.user.detail('${user.id}');">详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.user.changeStatus('${user.id}', 1);">启用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.user.changeStatus('${user.id}', 0);">停用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+            {@/each}
+        </table>
+    </script>
+</div>
+
+<div th:fragment="tpl_user_add">
+    <script id="tpl_user_add" type="text/template">
+        <div class="container_header_info">用户新增<span onclick="module.user.list()">返回</span></div>
+        <form id="form_user_add">
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;用户名:</lable>
+                <input type="input" name="username"/>
+            </p>
+            <p>
+                <lable>真实姓名:</lable>
+                <input type="input" name="realname"/>
+            </p>
+            <p>
+                <lable>手机号码:</lable>
+                <input type="input" name="mobile"/>
+            </p>
+            <p>
+                <lable>邮箱地址:</lable>
+                <input type="input" name="email"/>
+            </p>
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态:</lable>
+                <select name="status">
+                    <option value="1">启用</option>
+                    <option value="0">禁用</option>
+                </select>
+            </p>
+            <p>
+                <input type="button" class="form_save_button" onclick="module.user.save()" th:value="保存" />
+                <input type="button" class="form_reset_button" onclick="module.user.reset()" th:value="重置" />
+            </p>
+        </form>
+    </script>
+</div>
+<div th:fragment="tpl_user_edit">
+    <script id="tpl_user_edit" type="text/template">
+        <div class="container_header_info">用户编辑<span onclick="module.user.list()">返回</span></div>
+        <hr/>
+        <form id="form_user_edit" action="" method="post">
+            <input type="hidden" name="id" value="${id}"/>
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;用户名:</lable>
+                <input type="input" name="username" value="${username}"/>
+            </p>
+            <p>
+                <lable>真实姓名:</lable>
+                <input type="input" name="realname" value="${realname}"/>
+            </p>
+            <p>
+                <lable>手机号码:</lable>
+                <input type="input" name="mobile" value="${mobile}"/>
+            </p>
+            <p>
+                <lable>邮箱地址:</lable>
+                <input type="input" name="email" value="${email}"/>
+            </p>
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态:</lable>
+                <select name="status">
+                    <option value="1">启用</option>
+                    <option value="0">禁用</option>
+                </select>
+            </p>
+            <p>
+                <input type="button" class="form_save_button" onclick="module.user.update()" th:value="保存" />
+                <input type="button" class="form_reset_button" onclick="module.user.edit(${id})" th:value="重置" />
+            </p>
+        </form>
+    </script>
+</div>
+<div th:fragment="tpl_user_detail">
+    <script id="tpl_user_detail" type="text/template">
+        <div class="container_header_info">用户详情<span onclick="module.user.list()">返回</span></div>
+        <hr/>
+        <div class="container_detail_info">
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;用户名:</lable>
+                <span>${username}</span>
+            </p>
+            <p>
+                <lable>真实姓名:</lable>
+                <span>${realname}</span>
+            </p>
+            <p>
+                <lable>手机号码:</lable>
+                <span>${mobile}</span>
+            </p>
+            <p>
+                <lable>邮箱地址:</lable>
+                <span>${email}</span>
+            </p>
+        </div>
+    </script>
+</div>
+</html>

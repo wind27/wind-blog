@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="header">
+    <script id="header_tpl" type="text/template">
+        {@each menus as menu,index}
+        <li><a href="${menu.url}">${menu.name}</a></li>
+        {@/each}
+    </script>
+
+    <div class="div_header_img">
+        <img width="50px" height="50px;" src="/image/tmp/1.png" alt="图片1" style="display: block;float: left;"/>
+    </div>
+    <div class="div_header_menus">
+        <ul></ul>
+    </div>
+    <div class="div_header_user">
+        <label style="line-height: 70px;"></label>
+    </div>
+</div>
+</html>

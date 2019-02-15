@@ -1,0 +1,123 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="tpl_role_list">
+    <script id="tpl_role_list" type="text/template">
+        <div class="container_header_info">角色列表</div>
+        <hr style="color: #987cb9;"/>
+        <form>
+            <input type="button" class="form_add_button" onclick="module.role.add()" th:value="新增"/>
+        </form>
+        <table border="1" cellpadding="3" cellspacing="0" style="">
+            <tr>
+                <th>名称</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            {@each roles as role,index}
+            <tr>
+                <td>${role.name}</td>
+                <td>
+                    {@if role.status===1}启用{@else}停用{@/if}
+                </td>
+                <td>
+                    <a onclick="module.role.edit('${role.id}');">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.role.detail('${role.id}');">详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.role.changeStatus('${role.id}', 1);">启用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a onclick="module.role.changeStatus('${role.id}', 0);">停用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+            {@/each}
+        </table>
+    </script>
+</div>
+
+<div th:fragment="tpl_role_add">
+    <script id="tpl_role_add" type="text/template">
+        <div class="container_header_info">角色新增<span onclick="module.role.list()">返回</span></div>
+        <form id="form_role_add">
+            <p>
+                <lable>名称:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</lable>
+                <input type="input" name="name"/>
+            </p>
+            <p>
+                <lable>状态:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</lable>
+                <select name="status">
+                    <option value="1">启用</option>
+                    <option value="0">禁用</option>
+                </select>
+            </p>
+
+            <p>
+                <div>
+            <lable>角色权限:</lable>
+            <table>
+                <tr>
+                    <th align="center"><label>待选权限</label></th>
+                    <th>&nbsp;</th>
+                    <th align="center"><label>已选权限</label></th>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <select name="all_permission" size="10">
+                            <option value="auth.user.list">用户列表</option>
+                            <option value="auth.user.add">用户新增</option>
+                            <option value="auth.user.edit">用户编辑</option>
+                            <option value="auth.user.status.change">用户启用/停用</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td align="center">
+                        <select name="all_permission" size="10">
+                            <option value="auth.user.list">用户列表</option>
+                            <option value="auth.user.add">用户新增</option>
+                            <option value="auth.user.edit">用户编辑</option>
+                            <option value="auth.user.status.change">用户启用/停用</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+            </p>
+            <p>
+                <input type="button" class="form_save_button" onclick="module.role.save()" th:value="保存"/>
+                <input type="button" class="form_reset_button" onclick="module.role.reset()" th:value="重置"/>
+            </p>
+        </form>
+    </script>
+</div>
+<div th:fragment="tpl_role_edit">
+    <script id="tpl_role_edit" type="text/template">
+        <div class="container_header_info">角色编辑<span onclick="module.role.list()">返回</span></div>
+        <hr/>
+        <form id="form_role_edit" action="" method="post">
+            <input type="hidden" name="id" value="${id}"/>
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;名称:</lable>
+                <input type="input" name="name" value="${name}"/>
+            </p>
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态:</lable>
+                <select name="status">
+                    <option value="1">启用</option>
+                    <option value="0">禁用</option>
+                </select>
+            </p>
+            <p>
+                <input type="button" class="form_save_button" onclick="module.role.update()" th:value="保存"/>
+                <input type="button" class="form_reset_button" onclick="module.role.edit(${id})" th:value="重置"/>
+            </p>
+        </form>
+    </script>
+</div>
+<div th:fragment="tpl_role_detail">
+    <script id="tpl_role_detail" type="text/template">
+        <div class="container_header_info">角色详情<span onclick="module.role.list()">返回</span></div>
+        <hr/>
+        <div class="container_detail_info">
+            <p>
+                <lable>&nbsp;&nbsp;&nbsp;名称:</lable>
+                <span>${name}</span>
+            </p>
+        </div>
+    </script>
+</div>
+</html>

@@ -2,9 +2,25 @@ spring:
   application:
       name: "wind-blog"
 
-#  data:
-#    elasticsearch:
-#      cluster-nodes: elasticsearch:9200
+  resources:
+    static-locations: classpath:/webapp/static/
+
+#    static-locations: file:/Users/qianchun/wind/wind-blog/src/main/resources/webapp/static/
+
+
+  thymeleaf:
+    prefix: classpath:/webapp/view/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
+    check-template-location: false
+
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/view/ # 页面默认前缀目录
+#      suffix: .jsp # 响应页面默认后缀
 
   redis:
     database: 0 # Redis数据库索引（默认为0）
@@ -18,19 +34,12 @@ spring:
       max-idle: 8 # 连接池中的最大空闲连接
       min-idle: 0 # 连接池中的最小空闲连接
 
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: admin
-    password: admin
-  # publisher-confirms: true
-    virtual-host: /
-
+#  datasource:
+#    url: jdbc:mysql://mysql:3306/wind_auth?useUnicode=true&characterEncoding=utf8&useSSL=true
+#    username: root
+#    password: Dev123@wind.COM
+#    driver-class-name: com.mysql.jdbc.Driver
   datasource:
-    url: jdbc:mysql://mysql:3306/wind_blog?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: Dev123@wind.COM
-    driver-class-name: com.mysql.jdbc.Driver
-
+    initialize: false
 server:
-  port: 8080
+  port: 8099

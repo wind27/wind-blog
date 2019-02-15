@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>表单管理</title>
+
+    <script language="javascript" src="/js/lib/jquery1.10.2.min.js"></script>
+    <script language="javascript" src="/js/form.js"></script>
+    <link rel="stylesheet" href="/css/form.css" type="text/css"/>
+
+
+    <style type="text/css">
+        tbody tr:nth-child(even) td,
+        tbody tr:nth-child(even) th {}
+
+        tbody tr:nth-child(odd) td,
+        tbody tr:nth-child(odd) th {background-color:rgb(221, 221, 221);}
+
+
+        table {
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+
+            border-top-color: rgb(221, 221, 221);
+            border-top-style: solid;
+            border-top-width: 1px;
+        }
+
+        table tr {
+            height: 34px;
+        }
+    </style>
+</head>
+<body>
+<!-- 表单属性列表 -->
+<div id="container">
+    <table id="">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>字段名</th>
+                <th>控件类型</th>
+                <th>css样式</th>
+                <th>是否显示</th>
+                <th>默认值</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="field, stat : ${fields} ">
+                <td th:text="${stat.count}"></td>
+                <td th:text="${field.name}"></td>
+                <td th:text="${field.type}"></td>
+                <td th:text="${field.cssClass}"></td>
+                <td th:text="${field.isShow}"></td>
+                <td th:text="${field.defaultVal}"></td>
+                <td>修改,删除</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+

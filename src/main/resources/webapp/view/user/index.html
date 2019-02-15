@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户管理</title>
+    <link th:href="@{'/css/common/common.css?v=123'}" rel="stylesheet"/>
+    <!--<script src="/js/lib/require.js" data-main="/js/main.js?v=31e22" id="page_menu_index"></script>-->
+    <script src="/js/lib/require.js" data-main="/js/main.js?v=221" id="current-js" current-module ="user" init-method="list" async="true"></script>
+</head>
+<body>
+<div th:include="user/usertpl :: tpl_user_add"></div>
+<div th:include="user/usertpl :: tpl_user_edit"></div>
+<div th:include="user/usertpl :: tpl_user_detail"></div>
+<div th:include="user/usertpl :: tpl_user_list"></div>
+<!-- header start -->
+<div th:class="header" th:include="common/header :: header "></div>
+<!-- header end -->
+
+<!-- container start -->
+<div class="container"></div>
+<!-- container end -->
+
+<!-- footer start -->
+<div th:class="footer" th:include="common/footer :: copyright"></div>
+<!-- footer end -->
+</body>
+</html>
