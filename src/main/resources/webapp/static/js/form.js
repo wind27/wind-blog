@@ -135,7 +135,8 @@ var form = {
         $("#css").val('');
         $("#isShow").val('');
         $("#defaultVal").val('');
-        $("#type").html('');
+        $("#type").html('<option value="0">请选择</option>');
+
     },
 
     /**

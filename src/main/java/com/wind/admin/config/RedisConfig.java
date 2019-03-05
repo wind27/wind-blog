@@ -18,7 +18,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author qianchun 2018/9/4
  **/
 @Service
-@PropertySource("classpath:prop/redis.properties")
+//@PropertySource("classpath:prop/redis.properties")
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Value("${redis.hostName}")
@@ -71,7 +71,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * JedisPoolConfig 连接池
-     * 
+     *
      * @return JedisPoolConfig
      */
     @SuppressWarnings("all")
@@ -99,7 +99,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 单机版配置 JedisConnectionFactory
-     * 
+     *
      * @param jedisPoolConfig jedisPoolConfig
      * @return JedisConnectionFactory
      */
@@ -121,7 +121,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 实例化 RedisTemplate 对象
-     * 
+     *
      * @param redisConnectionFactory redisConnectionFactory
      * @return redisTemplate
      */

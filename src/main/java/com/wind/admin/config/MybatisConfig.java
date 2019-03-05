@@ -29,7 +29,7 @@ import java.util.Properties;
  * @date 2019/1/29
  **/
 @Configuration // 配置
-@PropertySource("classpath:prop/db.properties") // 用来指定配置文件的位置
+//@PropertySource("classpath:db.properties") // 用来指定配置文件的位置
 @MapperScan(basePackages = { "com.wind.admin.dao" })
 public class MybatisConfig {
     private final static Logger logger = LoggerFactory.getLogger(MybatisConfig.class);

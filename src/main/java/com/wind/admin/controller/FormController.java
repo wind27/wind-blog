@@ -68,7 +68,7 @@ public class FormController {
     @RequestMapping(value = "/field/add", method = RequestMethod.GET)
     public ModelAndView fieldAdd(HttpServletRequest request, Field field) {
         ModelAndView model = new ModelAndView();
-        model.setViewName("field/list");
+        model.setViewName("field/add");
         return model;
     }
 }
