@@ -185,7 +185,8 @@
                 <includes>
                     <include>META-INF/*.*</include>
                     <include>logback*.*</include>
-                    <include>application.properties</include>
+                    <include>*.properties</include>
+                    <include>template/*.*</include>
                 </includes>
             </resource>
         </resources>
@@ -204,15 +205,15 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>META-INF/*.*</exclude>
                         <exclude>logback.xml</exclude>
-                        <exclude>application.properties</exclude>
+                        <exclude>*.properties</exclude>
+                        <exclude>template/*.*</exclude>
                     </excludes>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.wind.admin.Application</mainClass>
+                            <mainClass>com.wind.admin.BlogApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
