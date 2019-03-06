@@ -49,7 +49,7 @@ public class MybatisConfig {
         String catalogs = null;
         try {
             catalogs = env.getProperty("database.catlog");
-            if (catalogs.isEmpty()) {
+            if (catalogs==null || catalogs.isEmpty()) {
                 return;
             }
 
