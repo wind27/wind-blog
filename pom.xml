@@ -140,6 +140,12 @@
             <artifactId>wind-commons</artifactId>
             <version>${snapshot-version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.wind</groupId>
+            <artifactId>wind-dbpool</artifactId>
+            <version>${snapshot-version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

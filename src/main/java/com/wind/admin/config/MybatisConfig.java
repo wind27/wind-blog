@@ -1,8 +1,8 @@
 package com.wind.admin.config;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.wind.admin.db.DynamicDataSource;
-import com.wind.admin.emun.DatabaseCatalog;
+import com.wind.dbpool.database.DynamicDataSource;
+import com.wind.dbpool.emun.DatabaseCatalog;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
